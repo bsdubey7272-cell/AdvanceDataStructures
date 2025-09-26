@@ -1,0 +1,28 @@
+class Solution {
+    public int shipWithinDays(int[] weights, int D) {
+        int left = 0, right = 0;
+        for (int w : weights) {
+            left = Math.max(left, w);
+            right += w;              
+        }
+        while (left < right) {
+            int mid = left + (right - left) / 2;
+
+            if (canShip(weights, D, mid)) right = mid;
+            else left = mid + 1;
+        }
+
+        return left;
+    }
+  private boolean canShip(int[] weights, int D, int cap) {
+        int days = 1, sum = 0;
+        for (int w : weights) {
+            if (sum + w > cap) { // start next day
+                days++;
+                sum = 0;
+            }
+            sum += w;
+        }
+        return days <= D;
+    }
+}
